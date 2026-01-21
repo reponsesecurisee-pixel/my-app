@@ -10,7 +10,7 @@ export default function ValentinApp() {
     situation: '',
     ton: '',
     context: '',
-    userMessage: '' // Теперь это обязательное поле
+    userMessage: '' // Обязательное поле
   });
   
   // Состояния для результатов
@@ -20,7 +20,7 @@ export default function ValentinApp() {
   
   // Состояния для платной части
   const [proposals, setProposals] = useState([]);
-  const [advice, setAdvice] = useState(''); // Новое поле для совета
+  const [advice, setAdvice] = useState('');
   
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -71,7 +71,6 @@ export default function ValentinApp() {
 
   const analyzeRisk = async () => {
     setLoading(true);
-    // Промпт теперь жестче привязан к тексту пользователя
     const prompt = `Analyse ce message pour la Saint-Valentin (C'EST UN DÉTECTEUR DE RISQUE, sois critique).
     
     Situation: ${formData.situation}
@@ -112,7 +111,6 @@ export default function ValentinApp() {
     setLoading(true);
     setStep('results'); 
     
-    // Добавил запрос СОВЕТА (Advice)
     const prompt = `Génère 3 corrections parfaites pour ce message de Saint-Valentin + 1 conseil stratégique.
     
     Situation: ${dataToUse.situation}
@@ -172,9 +170,9 @@ export default function ValentinApp() {
             <div className="inline-block p-3 bg-red-900/30 rounded-full mb-6">
               <AlertTriangle className="w-8 h-8 text-red-400" />
             </div>
-            {/* СМЕНА ПОЗИЦИОНИРОВАНИЯ */}
-            <h1 className="text-4xl font-light mb-4">Détecteur de Risque SMS</h1>
-            <p className="text-xl text-slate-300 font-light mb-8">Ne devenez pas "le mec bizarre" à la Saint-Valentin.</p>
+            {/* ИСПРАВЛЕНО: Вернули старый заголовок без SMS */}
+            <h1 className="text-4xl font-light mb-4">Saint-Valentin : Évitez l'erreur</h1>
+            <p className="text-xl text-slate-300 font-light mb-8">Un message raté → vous devenez "le mec un peu bizarre"</p>
             
             <div className="flex justify-center gap-8 mb-8">
               <div className="flex items-center gap-2 text-sm text-slate-400">
@@ -195,14 +193,14 @@ export default function ValentinApp() {
           </div>
 
           <button onClick={() => setStep('form')} className="w-full bg-white text-slate-900 py-4 rounded-lg font-medium text-lg hover:bg-slate-100 transition">
-            Tester mon message — gratuit
+            Voir si c'est une mauvaise idée — gratuit
           </button>
         </div>
       </div>
     );
   }
 
-  // --- ЭКРАН 2: ФОРМА (ОБЯЗАТЕЛЬНЫЕ ПОЛЯ) ---
+  // --- ЭКРАН 2: ФОРМА ---
   if (step === 'form') {
     return (
       <div className="min-h-screen bg-slate-900 text-white p-6">
@@ -237,7 +235,8 @@ export default function ValentinApp() {
                 onChange={(e) => setFormData({...formData, userMessage: e.target.value})} 
                 className="w-full p-3 bg-slate-700 rounded text-white border border-slate-600 focus:border-white outline-none" 
                 rows={4} 
-                placeholder="Écrivez ce que vous comptiez envoyer (même si c'est nul, l'IA va le corriger)..."
+                // ИСПРАВЛЕНО: Убрано упоминание ИИ
+                placeholder="Écrivez ce que vous comptiez envoyer (même si c'est nul, on va le corriger)..."
               />
             </div>
 
@@ -246,7 +245,6 @@ export default function ValentinApp() {
               <textarea value={formData.context} onChange={(e) => setFormData({...formData, context: e.target.value})} className="w-full p-3 bg-slate-700 rounded text-white border border-slate-600 focus:border-white outline-none" rows={2} placeholder="Ex: On s'est vus 3 fois, elle met du temps à répondre..."/>
             </div>
 
-            {/* ВАЛИДАЦИЯ: КНОПКА НЕАКТИВНА БЕЗ СООБЩЕНИЯ */}
             <button 
               onClick={analyzeRisk} 
               disabled={loading || !formData.situation || !formData.ton || !formData.userMessage} 
@@ -314,11 +312,11 @@ export default function ValentinApp() {
           </div>
 
           {loading ? (
-             <div className="text-center py-12 text-slate-400 animate-pulse">L'IA rédige vos messages et prépare le conseil...</div>
+             // ИСПРАВЛЕНО: Убрано слово ИИ
+             <div className="text-center py-12 text-slate-400 animate-pulse">Rédaction de vos options et du conseil stratégique...</div>
           ) : (
             <div className="space-y-6">
               
-              {/* НОВЫЙ БЛОК: СОВЕТ */}
               {advice && (
                 <div className="bg-blue-900/20 border border-blue-500/30 p-5 rounded-lg flex gap-4 items-start">
                   <Lightbulb className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
