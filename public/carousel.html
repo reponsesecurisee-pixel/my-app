@@ -3,92 +3,110 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Risk Frame Final V2</title>
+<title>Risk Frame Minimal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --bg: #EAEAEA;
-    --panel: #FFFFFF;
-    --border: rgba(0,0,0,0.1);
-    --danger: #D32F2F;
-    --text: #111111;
+    --bg: #F0F0F0;         /* Светло-серый фон (холодный) */
+    --panel: #FFFFFF;      /* Белая карточка */
+    --text: #111111;       /* Черный текст */
+    --danger: #CC0000;     /* Темно-красный (Кровь/Опасность) */
   }
   
   body {
     margin: 0; padding: 0; width: 1080px; height: 1350px;
     background: var(--bg); font-family: 'Inter', sans-serif;
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
   }
 
   .frame {
     position: relative; width: 900px; height: 1150px;
-    background: var(--panel); /* Белый фон по умолчанию */
-    border: 1px solid var(--border);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-    transform: translateX(-10px) translateY(10px);
-    display: flex; flex-direction: column; justify-content: center;
-    padding: 90px; box-sizing: border-box;
+    background: var(--panel);
+    /* Тень убрана для "плоского" жесткого стиля или оставлена минимальной */
+    box-shadow: 0 40px 80px rgba(0,0,0,0.08); 
+    display: flex; 
+    flex-direction: column;
+    /* ГЛАВНОЕ: Текст смещен вниз */
+    justify-content: flex-end; 
+    padding: 100px; 
+    padding-bottom: 250px; /* Отступ снизу (текст будет висеть тут) */
+    box-sizing: border-box;
   }
 
-  .risk-line {
-    position: absolute; left: -8px; top: 60px;
-    width: 8px; height: 120px; background: var(--danger);
-    z-index: 10;
+  /* Красная линия риска (едва заметная, сверху) */
+  .risk-mark {
+    position: absolute; top: 0; left: 80px;
+    width: 6px; height: 180px; background: var(--danger);
   }
 
-  .glitch {
-    position: absolute; right: 40px; bottom: 40px;
-    font-family: 'JetBrains Mono', monospace; font-size: 14px;
-    color: rgba(0,0,0,0.3); letter-spacing: 2px;
-  }
-
+  /* ТЕКСТ */
   #content {
-    font-size: 75px; font-weight: 700; line-height: 1.2;
-    color: var(--text); white-space: pre-wrap; z-index: 2;
+    color: var(--text);
+    white-space: pre-wrap;
+    line-height: 1.1;
+    /* По умолчанию (слайд 1 и 2) - средний вес */
+    font-size: 75px; 
+    font-weight: 600; 
+    letter-spacing: -2px;
   }
 
-  /* --- ЖЕСТКИЙ РЕЖИМ ФИНАЛА --- */
-  /* Используем !important, чтобы точно перекрасить фон */
+  /* ИЕРАРХИЯ: Слайды 3 и 4 (индексы 2 и 3) становятся ОГРОМНЫМИ */
+  .frame.heavy #content {
+    font-size: 100px; /* Крупнее */
+    font-weight: 900; /* Жирнее */
+  }
+
+  /* ФИНАЛ: Красный текст на белом фоне */
   body.final-mode .frame {
-    background-color: var(--danger) !important; 
-    border: none !important;
-    transform: none !important;
+    background: #FFFFFF !important;
+    border: 20px solid #FFFFFF; /* Визуальная рамка */
   }
 
   body.final-mode #content {
-    color: #FFFFFF !important; /* Текст точно белый */
-    text-transform: uppercase; text-align: center;
-    font-size: 90px; font-weight: 800;
+    color: var(--danger) !important; /* Текст красный */
+    font-size: 110px; /* Максимальный размер */
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    /* Для финала центрируем текст, или оставляем внизу? 
+       Оставим внизу для единого стиля давления */
   }
 
-  body.final-mode .risk-line {
-    background: #FFFFFF !important;
-    height: 100%; top: 0; left: 0; width: 20px;
+  body.final-mode .risk-mark {
+    display: none; /* Убираем линию на финале */
   }
+
 </style>
 </head>
 <body>
-  <div class="frame">
-    <div class="risk-line"></div>
-    <div id="content"></div> <div class="glitch">RISK_SYS_2026</div>
+
+  <div class="frame" id="frameBox">
+    <div class="risk-mark"></div>
+    <div id="content"></div>
   </div>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const text = urlParams.get('t');
+    const text = urlParams.get('t') || "";
     const isFinal = urlParams.get('f') === '1';
+    // Получаем номер слайда (0, 1, 2, 3...)
+    const index = parseInt(urlParams.get('i')) || 0;
 
     const contentDiv = document.getElementById('content');
+    const frameDiv = document.getElementById('frameBox');
     
-    // Если текст пришел пустой, напишем ошибку (для диагностики)
-    if (!text) {
-        contentDiv.innerText = "ERROR: Empty Text";
-    } else {
-        contentDiv.innerText = text;
+    contentDiv.innerText = text;
+
+    // ЛОГИКА ИЕРАРХИИ
+    // Слайды 3 и 4 (индексы 2 и 3) делаем "Тяжелыми"
+    if (index === 2 || index === 3) {
+        frameDiv.classList.add('heavy');
     }
 
+    // ЛОГИКА ФИНАЛА
     if (isFinal) {
       document.body.classList.add('final-mode');
     }
