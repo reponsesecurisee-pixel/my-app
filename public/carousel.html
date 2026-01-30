@@ -3,149 +3,152 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Risk Frame Active</title>
+<title>Risk Frame Final</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --bg: #f4f4f4;
-    --panel: #ffffff;
-    --border: rgba(0,0,0,0.08);
-    --danger: #c62828;
-    --text-primary: #111;
+    --bg: #EAEAEA;
+    --panel: #FFFFFF;
+    --border: rgba(0,0,0,0.1);
+    --danger: #D32F2F;
+    --text: #111111;
   }
 
-  html, body {
+  body {
     margin: 0;
     padding: 0;
     width: 1080px;
-    height: 1350px; /* Увеличил до формата 4:5 (Instagram Portrait) */
+    height: 1350px;
     background: var(--bg);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    font-family: 'Inter', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
   }
 
-  /* Main container */
+  /* Основная карточка */
   .frame {
     position: relative;
-    width: 920px;       /* Чуть шире для текста */
-    height: 1190px;     /* Высота под формат 1350px */
+    width: 900px;
+    height: 1150px;
     background: var(--panel);
     border: 1px solid var(--border);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.06);
-    transform: translateX(-14px) translateY(6px); /* Ваше смещение сохранено */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    transform: translateX(-10px) translateY(10px); /* Ваш стильный сдвиг */
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Центрируем текст по вертикали */
-    padding: 80px;
+    justify-content: center;
+    padding: 90px;
     box-sizing: border-box;
     transition: all 0.3s ease;
   }
 
-  /* Red risk marker */
+  /* Красная линия риска (слева) */
   .risk-line {
     position: absolute;
-    left: -6px;
-    top: 100px;
-    width: 6px;
+    left: -8px;
+    top: 60px;
+    width: 8px;
     height: 120px;
     background: var(--danger);
-    transition: height 0.3s ease;
+    z-index: 10;
   }
 
-  /* Subtle system defect */
+  /* Декор: Глюк/Штрих-код */
   .glitch {
     position: absolute;
-    right: 32px;
-    bottom: 32px;
-    width: 120px;
-    height: 1px;
-    background: rgba(0,0,0,0.12);
+    right: 40px;
+    bottom: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: rgba(0,0,0,0.3);
+    letter-spacing: 2px;
   }
 
-  /* ТЕКСТ (Добавлено) */
+  /* ТЕКСТ */
   #content {
-    font-size: 68px;
-    font-weight: 600;
-    line-height: 1.25;
-    color: var(--text-primary);
+    font-size: 75px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
     white-space: pre-wrap;
-    z-index: 1;
+    z-index: 2;
   }
 
-  /* Grain effect (Ваш шум) */
+  /* Эффект зерна */
   .frame::after {
     content: "";
     position: absolute;
     inset: 0;
     background-image: repeating-linear-gradient(
       0deg,
-      rgba(0,0,0,0.015),
-      rgba(0,0,0,0.015) 1px,
+      rgba(0,0,0,0.03),
+      rgba(0,0,0,0.03) 1px,
       transparent 1px,
       transparent 2px
     );
     pointer-events: none;
-    z-index: 2;
+    z-index: 1;
   }
 
-  /* --- Стили для ФИНАЛЬНОГО слайда (когда f=1) --- */
+  /* --- РЕЖИМ ФИНАЛА (КРАСНЫЙ) --- */
   body.final-mode .frame {
-    background: var(--danger); /* Красный фон */
-    border-color: transparent;
+    background: var(--danger); /* Фон становится красным */
+    border: none;
+    transform: none; /* Убираем сдвиг для строгости */
   }
 
   body.final-mode #content {
-    color: #FFFFFF; /* Белый текст */
-    font-weight: 700;
+    color: #FFFFFF; /* Текст белый */
     text-align: center;
-    font-size: 85px; /* Крупнее */
     text-transform: uppercase;
+    font-size: 90px;
+    font-weight: 800;
   }
 
   body.final-mode .risk-line {
-    background: #fff; /* Белая линия */
-    height: 100%;     /* На всю высоту */
+    background: #FFFFFF; /* Линия белая */
+    height: 100%;
     top: 0;
     left: 0;
-    width: 15px;
+    width: 20px;
   }
 
   body.final-mode .glitch {
-    background: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.4);
   }
 
 </style>
 </head>
 
 <body>
+
   <div class="frame">
     <div class="risk-line"></div>
-    <div id="content">Loading text...</div>
-    <div class="glitch"></div>
+    <div id="content">Загрузка...</div>
+    
+    <div class="glitch">RISK_FRAME_ID_2049</div>
   </div>
 
   <script>
-    // Магия: читаем параметры из ссылки
     const urlParams = new URLSearchParams(window.location.search);
-    
-    // Получаем текст (t) и флаг финала (f)
-    const text = urlParams.get('t') || "SYSTEM ERROR: No text provided";
+    const text = urlParams.get('t') || "";
     const isFinal = urlParams.get('f') === '1';
 
-    // Вставляем текст
     const contentDiv = document.getElementById('content');
+    
+    // Вставляем текст
     contentDiv.innerText = text;
 
-    // Если это финал, включаем красный режим
+    // Включаем красный режим, если это финал
     if (isFinal) {
       document.body.classList.add('final-mode');
     }
   </script>
+
 </body>
 </html>
