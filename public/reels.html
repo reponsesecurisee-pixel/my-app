@@ -23,9 +23,10 @@
             flex-direction: column;
             align-items: center;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Обновленный хедер с фото */
+        /* Хедер */
         .header {
             width: 100%;
             height: 280px;
@@ -53,7 +54,7 @@
 
         .chat-area {
             width: 940px;
-            margin-top: 100px;
+            margin-top: 80px;
             display: flex;
             flex-direction: column;
             gap: 30px;
@@ -81,16 +82,18 @@
             border-bottom-left-radius: 10px;
         }
 
+        /* Поднятый блок диагностики (чтобы не срезало зумом) */
         .diagnosis {
-            margin-top: 220px;
+            margin-top: 150px;
             width: 900px;
             display: flex;
             flex-direction: column;
-            gap: 45px;
+            gap: 40px;
+            padding-bottom: 100px; /* Запас снизу */
         }
 
         .line {
-            font-size: 62px;
+            font-size: 60px;
             font-weight: 800;
             color: var(--text-dark);
             text-transform: uppercase;
@@ -100,11 +103,11 @@
         }
 
         .line.visible { opacity: 1; }
-        .line.final { color: var(--risk-red); margin-top: 25px; }
+        .line.final { color: var(--risk-red); margin-top: 30px; }
 
         .cursor-box {
             position: absolute;
-            bottom: 120px;
+            bottom: 150px; /* Чуть выше */
             font-size: 34px;
             color: var(--text-gray);
             display: flex;
@@ -116,6 +119,19 @@
             background: #007aff;
             margin-left: 12px;
             animation: blink 1s infinite;
+        }
+
+        /* Микротекст для алгоритмов */
+        .algo-anchor {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 10px;
+            color: rgba(0,0,0,0.08);
+            font-family: monospace;
+            z-index: 1000;
+            width: 90%;
+            pointer-events: none;
         }
 
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
@@ -148,6 +164,10 @@
         Analyse de risque en cours<span class="cursor"></span>
     </div>
 
+    <div class="algo-anchor">
+        risque social malaise message trop long silence réponse faible pression implicite mauvais timing intensité excessive
+    </div>
+
     <script>
         const params = new URLSearchParams(window.location.search);
         document.getElementById('msgMe').innerText = params.get('me') || '';
@@ -158,31 +178,23 @@
         document.getElementById('l4').innerText = params.get('l4') || '';
         document.getElementById('l5').innerText = params.get('l5') || '';
 
-        function revealLines(count) {
-            for (let i = 1; i <= count; i++) {
-                const el = document.getElementById('l' + i);
-                if (el) el.classList.add('visible');
+        function revealLines() {
+            for (let i = 1; i <= 6; i++) {
+                setTimeout(() => {
+                    const el = document.getElementById('l' + i);
+                    if (el) el.classList.add('visible');
+                }, i * 400); // Постепенное появление
             }
         }
 
-        if (!window.isPuppeteer) {
-            setTimeout(() => revealLines(6), 1000);
-        }
+        // Запуск анимации
+        window.onload = () => {
+            setTimeout(revealLines, 500);
+        };
     </script>
-    <div style="
-    position: absolute; 
-    bottom: 5px; 
-    left: 10px; 
-    font-size: 8px; 
-    color: rgba(0,0,0,0.1); 
-    font-family: monospace; 
-    z-index: 100;
-    line-height: 1;
-">
-    risque social malaise message trop long silence réponse faible pression implicite mauvais timing intensité excessive
-</div>
-    --window-size=1080,1920
 </body>
 </html>
+
+
 
 
