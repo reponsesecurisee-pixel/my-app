@@ -16,104 +16,105 @@
 
         body, html {
             margin: 0; padding: 0;
-            width: 1080px; height: 1920px; /* Формат 9:16 */
+            width: 1080px; height: 1920px;
             background-color: var(--bg-main);
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow: hidden;
         }
 
-        /* Заголовок чата */
+        /* Обновленный хедер с фото */
         .header {
             width: 100%;
-            height: 200px;
+            height: 280px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background: rgba(249, 249, 249, 0.94);
             border-bottom: 1px solid #d1d1d6;
+            padding-top: 40px;
         }
 
-        .contact-name { font-size: 38px; font-weight: 600; margin-top: 40px; }
-        .status { font-size: 24px; color: var(--text-gray); }
+        .avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 1px solid #d1d1d6;
+        }
 
-        /* Контейнер чата */
+        .contact-info { text-align: center; }
+        .contact-name { font-size: 42px; font-weight: 600; color: var(--text-dark); margin: 0; }
+        .status { font-size: 26px; color: var(--text-gray); margin-top: 5px; }
+
         .chat-area {
-            width: 900px;
+            width: 940px;
             margin-top: 100px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 30px;
         }
 
         .bubble {
             max-width: 75%;
-            padding: 24px 36px;
-            font-size: 44px;
+            padding: 28px 40px;
+            font-size: 46px;
             line-height: 1.3;
-            border-radius: 40px;
-            position: relative;
+            border-radius: 45px;
         }
 
         .me {
             align-self: flex-end;
             background-color: var(--bubble-me);
             color: white;
-            border-bottom-right-radius: 8px;
+            border-bottom-right-radius: 10px;
         }
 
         .her {
             align-self: flex-start;
             background-color: var(--bubble-her);
             color: var(--text-dark);
-            border-bottom-left-radius: 8px;
+            border-bottom-left-radius: 10px;
         }
 
-        /* Диагноз (Текст на экране) */
         .diagnosis {
-            margin-top: 200px;
-            width: 850px;
+            margin-top: 220px;
+            width: 900px;
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 45px;
         }
 
         .line {
-            font-size: 58px;
+            font-size: 62px;
             font-weight: 800;
             color: var(--text-dark);
             text-transform: uppercase;
             letter-spacing: -1.5px;
-            opacity: 0; /* Управляется через скрипт */
+            opacity: 0;
             transition: opacity 0.3s ease;
         }
 
         .line.visible { opacity: 1; }
-        
-        .line.final {
-            color: var(--risk-red);
-            margin-top: 20px;
-        }
+        .line.final { color: var(--risk-red); margin-top: 25px; }
 
-        /* Курсор ожидания */
         .cursor-box {
             position: absolute;
-            bottom: 150px;
-            width: 900px;
-            font-size: 32px;
+            bottom: 120px;
+            font-size: 34px;
             color: var(--text-gray);
             display: flex;
             align-items: center;
         }
 
         .cursor {
-            width: 4px;
-            height: 45px;
+            width: 4px; height: 45px;
             background: #007aff;
-            margin-left: 10px;
+            margin-left: 12px;
             animation: blink 1s infinite;
         }
 
@@ -122,8 +123,11 @@
 </head>
 <body>
     <div class="header">
-        <div class="contact-name">Celin</div>
-        <div class="status">en ligne</div>
+        <img src="celin.png" alt="Avatar" class="avatar">
+        <div class="contact-info">
+            <div class="contact-name">Celin</div>
+            <div class="status">en ligne</div>
+        </div>
     </div>
 
     <div class="chat-area">
@@ -141,13 +145,11 @@
     </div>
 
     <div class="cursor-box">
-        Analyse en cours<span class="cursor"></span>
+        Analyse de risque en cours<span class="cursor"></span>
     </div>
 
     <script>
-        // Функция для получения данных из URL
         const params = new URLSearchParams(window.location.search);
-        
         document.getElementById('msgMe').innerText = params.get('me') || '';
         document.getElementById('msgHer').innerText = params.get('her') || '';
         document.getElementById('l1').innerText = params.get('l1') || '';
@@ -156,7 +158,6 @@
         document.getElementById('l4').innerText = params.get('l4') || '';
         document.getElementById('l5').innerText = params.get('l5') || '';
 
-        // Функция, которую будет вызывать n8n через Puppeteer
         function revealLines(count) {
             for (let i = 1; i <= count; i++) {
                 const el = document.getElementById('l' + i);
@@ -164,7 +165,6 @@
             }
         }
 
-        // Если открыто просто в браузере для теста — показать всё через 1 сек
         if (!window.isPuppeteer) {
             setTimeout(() => revealLines(6), 1000);
         }
