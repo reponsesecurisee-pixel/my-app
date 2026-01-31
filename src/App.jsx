@@ -177,7 +177,7 @@ export default function ValentinApp() {
             <div className="flex justify-center gap-8 mb-8">
               <div className="flex items-center gap-2 text-sm text-slate-400">
                 <Clock className="w-4 h-4" />
-                <span>Jusqu'au 14 février: <span className="text-white font-medium">{daysLeft} jours</span></span>
+                <span>Chaque message compte</span></span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-400">
                 <Users className="w-4 h-4" />
