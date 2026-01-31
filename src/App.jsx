@@ -177,11 +177,11 @@ export default function ValentinApp() {
             <div className="flex justify-center gap-8 mb-8">
               <div className="flex items-center gap-2 text-sm text-slate-400">
                 <Clock className="w-4 h-4" />
-               <span>Chaque message compte</span>
-</div>
-<div className="flex items-center gap-2 text-sm text-slate-400">
-  <Users className="w-4 h-4" />
-  <span>Messages analysés</span>
+                <span>Jusqu'au 14 février: <span className="text-white font-medium">{daysLeft} jours</span></span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-slate-400">
+                <Users className="w-4 h-4" />
+                <span><span className="text-white font-medium">11743</span> messages analysés</span>
               </div>
             </div>
             
@@ -193,7 +193,7 @@ export default function ValentinApp() {
           </div>
 
           <button onClick={() => setStep('form')} className="w-full bg-white text-slate-900 py-4 rounded-lg font-medium text-lg hover:bg-slate-100 transition">
-            Voir si c'est une mauvaise idée
+            Voir si c'est une mauvaise idée 
           </button>
         </div>
       </div>
