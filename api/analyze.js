@@ -1,9 +1,10 @@
 export default async function handler(req, res) {
+  // Разрешаем только POST запросы
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { prompt } = req.body;
+  const { prompt, systemContext } = req.body;
 
   if (!process.env.OPENAI_API_KEY) {
     return res.status(500).json({ error: 'OpenAI API key not configured' });
@@ -17,29 +18,16 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4o', // Можно заменить на 'gpt-4o-mini' для экономии
         messages: [
-          {
-            role: 'system',
-            content: `
-Tu es un détecteur de risque social.
-Tu n’aides pas. Tu ne conseilles pas. Tu n’expliques pas.
-Tu évalues uniquement la probabilité qu’un message crée un malaise social.
-
-Tu parles avec assurance, sans empathie.
-Tu ne rassures jamais.
-Tu ne promets aucun résultat.
-
-Ta tâche est de formuler un risque crédible.
-`
+          { 
+            role: 'system', 
+            content: systemContext || 'You are a helpful assistant. Output JSON.' 
           },
-          {
-            role: 'user',
-            content: prompt
-          }
+          { role: 'user', content: prompt }
         ],
-        response_format: { type: 'json_object' },
-        temperature: 0.4
+        response_format: { type: "json_object" }, // Гарантирует JSON формат
+        temperature: 0.7
       })
     });
 
@@ -54,9 +42,6 @@ Ta tâche est de formuler un risque crédible.
 
   } catch (error) {
     console.error('API Error:', error);
-    return res.status(500).json({
-      error: 'Error processing request',
-      details: error.message
-    });
+    return res.status(500).json({ error: 'Error processing request', details: error.message });
   }
 }
