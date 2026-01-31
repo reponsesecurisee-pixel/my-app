@@ -171,17 +171,17 @@ export default function ValentinApp() {
               <AlertTriangle className="w-8 h-8 text-red-400" />
             </div>
             {/* ИСПРАВЛЕНО: Вернули старый заголовок без SMS */}
-            <h1 className="text-4xl font-light mb-4">Saint-Valentin : Évitez l'erreur</h1>
-            <p className="text-xl text-slate-300 font-light mb-8">Un message raté → vous devenez "le mec un peu bizarre"</p>
+            <h1 className="text-4xl font-light mb-4">Avant d’envoyer un message, vérifiez le risque</h1>
+            <p className="text-xl text-slate-300 font-light mb-8">Un message mal formulé modifie la perception</p>
             
             <div className="flex justify-center gap-8 mb-8">
               <div className="flex items-center gap-2 text-sm text-slate-400">
                 <Clock className="w-4 h-4" />
-                <span>Jusqu'au 14 février: <span className="text-white font-medium">{daysLeft} jours</span></span>
+                <span>Chaque message compte</span></span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-400">
                 <Users className="w-4 h-4" />
-                <span><span className="text-white font-medium">143</span> messages analysés</span>
+                <span><span className="text-white font-medium">11743</span> messages analysés</span>
               </div>
             </div>
             
