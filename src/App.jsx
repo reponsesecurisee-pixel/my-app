@@ -10,7 +10,7 @@ export default function ValentinApp() {
     situation: '',
     ton: '',
     context: '',
-    userMessage: '' // Обязательное поле
+    userMessage: ''
   });
   
   // Состояния для результатов
@@ -26,7 +26,7 @@ export default function ValentinApp() {
   const [copied, setCopied] = useState(false);
   const [daysLeft, setDaysLeft] = useState(0);
 
-  // 1. ЛОГИКА ВОЗВРАТА ПОСЛЕ ОПЛАТЫ
+  // 1. ЛОГИКА ВОЗВРАТА ПОСЛЕ ОПЛАТЫ (НЕ ТРОНУТА)
   useEffect(() => {
     const valentine = new Date('2026-02-14');
     const today = new Date();
@@ -40,7 +40,6 @@ export default function ValentinApp() {
         const parsed = JSON.parse(savedData);
         setFormData(parsed.formData);
         setRiskScore(parsed.riskScore);
-        // Запускаем генерацию
         generateFullProposals(parsed.formData);
       }
     }
@@ -71,39 +70,50 @@ export default function ValentinApp() {
 
   const analyzeRisk = async () => {
     setLoading(true);
-    const prompt = `Analyse ce message pour la Saint-Valentin (C'EST UN DÉTECTEUR DE RISQUE, sois critique).
+
+    const prompt = `Analyse ce message avant son envoi (C'EST UN DÉTECTEUR DE RISQUE, sois critique).
     
-    Situation: ${formData.situation}
-    Ton voulu: ${formData.ton}
-    Message de l'utilisateur (OBLIGATOIRE): "${formData.userMessage}"
-    Contexte: ${formData.context}
+Situation: ${formData.situation}
+Ton voulu: ${formData.ton}
+Message de l'utilisateur (OBLIGATOIRE): "${formData.userMessage}"
+Contexte: ${formData.context}
 
-    TÂCHE 1: Score risque (0-100). Soyez sévère si c'est "beauf" ou lourd.
-    TÂCHE 2: 2-3 conséquences sociales concrètes (ex: "Elle va screen pour montrer à ses copines").
-    TÂCHE 3: Preview d'une correction (juste le début flouté).
+TÂCHE 1: Score risque (0-100). Soyez sévère si c'est "beauf" ou lourd.
+TÂCHE 2: 2-3 conséquences sociales concrètes (ex: "Elle va screen pour montrer à ses copines").
+TÂCHE 3: Preview d'une correction (juste le début flouté).
 
-    Réponds JSON: { "score": 65, "warnings": ["..."], "preview": "..." }`;
+Réponds JSON: { "score": 65, "warnings": ["..."], "preview": "..." }`;
 
     try {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, systemContext: 'Tu es un expert en dynamique sociale parisienne. Tu juges les SMS.' })
+        body: JSON.stringify({
+          prompt,
+          systemContext: 'Tu es un expert en dynamique sociale parisienne. Tu juges les SMS.'
+        })
       });
+
       const data = await response.json();
-      const parsed = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
+      const parsed = typeof data.result === 'string'
+        ? JSON.parse(data.result)
+        : data.result;
 
       setRiskScore(parsed.score);
       setRiskWarnings(parsed.warnings);
       setPreviewText(parsed.preview);
       setStep('analysis');
+
     } catch (error) {
-      console.error(error);
       setRiskScore(72);
-      setRiskWarnings(["Risque d'être vu comme 'lourd'", "Le message manque de subtilité"]);
+      setRiskWarnings([
+        "Risque d'être vu comme 'lourd'",
+        "Le message manque de subtilité"
+      ]);
       setPreviewText("Je pensais que...");
       setStep('analysis');
     }
+
     setLoading(false);
   };
 
@@ -111,41 +121,51 @@ export default function ValentinApp() {
     setLoading(true);
     setStep('results'); 
     
-    const prompt = `Génère 3 corrections parfaites pour ce message de Saint-Valentin + 1 conseil stratégique.
+    const prompt = `Génère 3 corrections parfaites pour ce message + 1 conseil stratégique.
     
-    Situation: ${dataToUse.situation}
-    Ton: ${dataToUse.ton}
-    Message original (à corriger): "${dataToUse.userMessage}"
-    Contexte: ${dataToUse.context}
+Situation: ${dataToUse.situation}
+Ton: ${dataToUse.ton}
+Message original (à corriger): "${dataToUse.userMessage}"
+Contexte: ${dataToUse.context}
 
-    RÈGLES: Français élégant, pas de clichés, pas de "mon amour" si c'est le début.
+RÈGLES: Français élégant, pas de clichés, pas de "mon amour" si c'est le début.
 
-    Réponds JSON: { 
-      "proposals": [{"text": "...", "risk": 15}, ...],
-      "advice": "Un conseil court sur le timing ou l'attitude (ex: attends 20h pour envoyer...)"
-    }`;
+Réponds JSON: { 
+  "proposals": [{"text": "...", "risk": 15}, ...],
+  "advice": "Un conseil court sur le timing ou l'attitude (ex: attends 20h pour envoyer...)"
+}`;
 
     try {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, systemContext: 'Tu es un coach en communication. Réponds en JSON.' })
+        body: JSON.stringify({
+          prompt,
+          systemContext: 'Tu es un coach en communication. Réponds en JSON.'
+        })
       });
+
       const data = await response.json();
-      const parsed = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
+      const parsed = typeof data.result === 'string'
+        ? JSON.parse(data.result)
+        : data.result;
       
-      const proposalsList = Array.isArray(parsed) ? parsed : (parsed.proposals || []);
+      const proposalsList = Array.isArray(parsed)
+        ? parsed
+        : (parsed.proposals || []);
+
       setProposals(proposalsList.sort((a, b) => a.risk - b.risk));
       setAdvice(parsed.advice || "N'envoyez pas de deuxième message si elle ne répond pas.");
       
     } catch (error) {
       setProposals([
-        {text: "Une pensée pour toi aujourd'hui.", risk: 15},
-        {text: "Bonne Saint-Valentin.", risk: 35},
-        {text: "Salut, ça va ?", risk: 60}
+        { text: "Une pensée pour toi aujourd'hui.", risk: 15 },
+        { text: "Bonne journée.", risk: 35 },
+        { text: "Salut, ça va ?", risk: 60 }
       ]);
       setAdvice("Restez léger, ne mettez pas de pression.");
     }
+
     setLoading(false);
   };
 
@@ -160,6 +180,7 @@ export default function ValentinApp() {
     if (score < 60) return { label: 'Risque modéré', color: 'text-amber-600', bg: 'bg-amber-50' };
     return { label: 'Risque élevé', color: 'text-red-600', bg: 'bg-red-50' };
   };
+}
 
   // --- ЭКРАН 1: LANDING ---
   if (step === 'landing') {
