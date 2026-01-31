@@ -82,14 +82,13 @@
             border-bottom-left-radius: 10px;
         }
 
-        /* Поднятый блок диагностики (чтобы не срезало зумом) */
         .diagnosis {
             margin-top: 150px;
             width: 900px;
             display: flex;
             flex-direction: column;
             gap: 40px;
-            padding-bottom: 100px; /* Запас снизу */
+            padding-bottom: 100px;
         }
 
         .line {
@@ -107,7 +106,7 @@
 
         .cursor-box {
             position: absolute;
-            bottom: 150px; /* Чуть выше */
+            bottom: 150px;
             font-size: 34px;
             color: var(--text-gray);
             display: flex;
@@ -119,19 +118,6 @@
             background: #007aff;
             margin-left: 12px;
             animation: blink 1s infinite;
-        }
-
-        /* Микротекст для алгоритмов */
-        .algo-anchor {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            font-size: 10px;
-            color: rgba(0,0,0,0.08);
-            font-family: monospace;
-            z-index: 1000;
-            width: 90%;
-            pointer-events: none;
         }
 
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
@@ -164,37 +150,46 @@
         Analyse de risque en cours<span class="cursor"></span>
     </div>
 
-    <div class="algo-anchor">
-        risque social malaise message trop long silence réponse faible pression implicite mauvais timing intensité excessive
-    </div>
-
     <script>
         const params = new URLSearchParams(window.location.search);
-        document.getElementById('msgMe').innerText = params.get('me') || '';
-        document.getElementById('msgHer').innerText = params.get('her') || '';
-        document.getElementById('l1').innerText = params.get('l1') || '';
-        document.getElementById('l2').innerText = params.get('l2') || '';
-        document.getElementById('l3').innerText = params.get('l3') || '';
-        document.getElementById('l4').innerText = params.get('l4') || '';
-        document.getElementById('l5').innerText = params.get('l5') || '';
+        
+        // Наполняем сообщения
+        document.getElementById('msgMe').innerText = params.get('me') || 'On se voit ce soir ?';
+        document.getElementById('msgHer').innerText = params.get('her') || 'Pas maintenant.';
 
+        // Логика для строк диагноза
+        const diagText = params.get('diag');
+        if (diagText) {
+            // Если мы передали весь текст одной строкой с переносами
+            const lines = diagText.split('\n');
+            for (let i = 0; i < 5; i++) {
+                if (lines[i]) document.getElementById('l' + (i + 1)).innerText = lines[i];
+            }
+        } else {
+            // Если передаем по отдельности l1, l2...
+            for (let i = 1; i <= 5; i++) {
+                const val = params.get('l' + i);
+                if (val) document.getElementById('l' + i).innerText = val;
+            }
+        }
+
+        // Плавное появление строк
         function revealLines() {
             for (let i = 1; i <= 6; i++) {
                 setTimeout(() => {
                     const el = document.getElementById('l' + i);
-                    if (el) el.classList.add('visible');
-                }, i * 400); // Постепенное появление
+                    if (el && el.innerText.trim() !== "") {
+                        el.classList.add('visible');
+                    } else if (i === 6) { 
+                        el.classList.add('visible'); // Финальная красная строка всегда видна
+                    }
+                }, i * 600);
             }
         }
 
-        // Запуск анимации
         window.onload = () => {
             setTimeout(revealLines, 500);
         };
     </script>
 </body>
 </html>
-
-
-
-
