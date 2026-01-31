@@ -1,6 +1,3 @@
-const isAdmin =
-  new URLSearchParams(window.location.search).get('admin') === '1'
-
 import React, { useState, useEffect } from 'react'
 import { AlertTriangle, Clock, Users, CheckCircle, Lightbulb } from 'lucide-react'
 
@@ -342,11 +339,16 @@ Ajouter une indication de prudence générale.
                 </div>
               ))}
             </>
-        {isAdmin && (
-  <div className="fixed bottom-4 right-4 bg-black text-white text-xs p-3 rounded-lg opacity-80 z-50">
-    <div><strong>FREE:</strong> {localStorage.getItem('free_tests') || 0}</div>
-    <div><strong>PAID:</strong> {localStorage.getItem('paid_unlocks') || 0}</div>
-  </div>
-)}
-
           )}
+
+          <button
+            onClick={() => window.location.reload()}
+            className="text-xs text-slate-500 text-center w-full"
+          >
+            Analyser un autre message
+          </button>
+        </div>
+      </div>
+    )
+  }
+}
