@@ -71,7 +71,7 @@ export default function ValentinApp() {
 
   const analyzeRisk = async () => {
     setLoading(true);
-    const prompt = `Analyse ce message pour la Saint-Valentin (C'EST UN DÉTECTEUR DE RISQUE, sois critique).
+    const prompt = `Analyse ce message  (C'EST UN DÉTECTEUR DE RISQUE, sois critique).
     
     Situation: ${formData.situation}
     Ton voulu: ${formData.ton}
@@ -141,7 +141,7 @@ export default function ValentinApp() {
     } catch (error) {
       setProposals([
         {text: "Une pensée pour toi aujourd'hui.", risk: 15},
-        {text: "Bonne Saint-Valentin.", risk: 35},
+        {text: "Bonne fête.", risk: 35},
         {text: "Salut, ça va ?", risk: 60}
       ]);
       setAdvice("Restez léger, ne mettez pas de pression.");
@@ -171,7 +171,7 @@ export default function ValentinApp() {
               <AlertTriangle className="w-8 h-8 text-red-400" />
             </div>
             {/* ИСПРАВЛЕНО: Вернули старый заголовок без SMS */}
-            <h1 className="text-4xl font-light mb-4">Saint-Valentin : Évitez l'erreur</h1>
+            <h1 className="text-4xl font-light mb-4">Message à risque : évitez l’erreur</h1>
             <p className="text-xl text-slate-300 font-light mb-8">Un message raté → vous devenez "le mec un peu bizarre"</p>
             
             <div className="flex justify-center gap-8 mb-8">
@@ -193,7 +193,7 @@ export default function ValentinApp() {
           </div>
 
           <button onClick={() => setStep('form')} className="w-full bg-white text-slate-900 py-4 rounded-lg font-medium text-lg hover:bg-slate-100 transition">
-            Voir si c'est une mauvaise idée — gratuit
+            Voir si c'est une mauvaise idée
           </button>
         </div>
       </div>
