@@ -3,136 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPhone Style Chat - Fixed</title>
+    <title>Risk Diagnosis - Instant</title>
     <style>
         :root {
-            --bg-main: #ffffff;
-            --bubble-me: #e5e5ea; /* Серый (Её ответ) */
-            --bubble-her: #007aff; /* Синий (Его сообщение) */
+            --bubble-me: #34c759; /* Зеленый (Его) */
+            --bubble-her: #e5e5ea; /* Серый (Ее) */
             --risk-red: #ff3b30;
         }
 
         body, html {
             margin: 0; padding: 0;
             width: 1080px; height: 1920px;
-            background-color: var(--bg-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            display: flex;
-            flex-direction: column;
             overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
         }
 
-        /* Область чата */
-        .chat-container {
-            padding: 60px 40px;
+        /* Фоновое изображение телефона на столе */
+        .main-container {
+            position: relative;
+            width: 1080px;
+            height: 1920px;
+            background: url('PHONE_TEMPLATE.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        /* Область внутри экрана */
+        .screen-content {
+            position: absolute;
+            top: 420px; /* Позиция чата */
+            left: 140px;
+            width: 800px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
         }
 
         .bubble {
-            max-width: 70%;
+            max-width: 80%;
             padding: 25px 35px;
-            font-size: 40px;
+            font-size: 42px;
+            line-height: 1.3;
             border-radius: 40px;
-            line-height: 1.2;
-            position: relative;
-            /* Убираем анимации и прозрачность, чтобы текст был виден сразу */
+            margin-bottom: 20px;
+            /* Текст виден СРАЗУ */
             opacity: 1 !important;
             display: block !important;
         }
 
-        /* Его сообщение (слева) */
+        /* Его сообщение — СПРАВА, ЗЕЛЕНОЕ */
         .me {
-            align-self: flex-start;
-            background-color: var(--bubble-me);
-            color: black;
-            border-bottom-left-radius: 5px;
-        }
-
-        /* Ее ответ (справа) */
-        .her {
             align-self: flex-end;
-            background-color: var(--bubble-her);
+            background-color: var(--bubble-me);
             color: white;
-            border-bottom-right-radius: 5px;
-            margin-top: 10px;
+            border-bottom-right-radius: 8px;
         }
 
-        /* Блок анализа */
-        .analysis-box {
+        /* Её ответ — СЛЕВА, СЕРОЕ */
+        .her {
+            align-self: flex-start;
+            background-color: var(--bubble-her);
+            color: black;
+            border-bottom-left-radius: 8px;
+        }
+
+        /* Блок диагноза — СДВИГУТ НИЖЕ */
+        .diagnosis {
             margin-top: 100px;
-            padding: 0 60px;
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 25px;
         }
 
-        .main-message {
-            font-size: 55px;
+        .line {
+            font-size: 52px;
             font-weight: 800;
             color: #1c1c1e;
             text-transform: uppercase;
-            line-height: 1.1;
+            letter-spacing: -1px;
+            /* Без анимаций */
             opacity: 1 !important;
         }
 
-        .red-line {
-            font-size: 65px;
-            font-weight: 900;
+        .final {
             color: var(--risk-red);
-            text-transform: uppercase;
             border-top: 4px solid var(--risk-red);
-            padding-top: 20px;
+            padding-top: 15px;
             margin-top: 10px;
-            opacity: 1 !important;
-        }
-
-        .footer {
-            position: absolute;
-            bottom: 80px;
-            width: 100%;
-            text-align: center;
-            font-size: 30px;
-            color: #8e8e93;
         }
     </style>
-    <script>
-        // Функция выполняется мгновенно, не дожидаясь полной загрузки страницы
-        function fillData() {
-            const params = new URLSearchParams(window.location.search);
-            // Используем интервал, чтобы гарантированно поймать момент появления элементов в DOM
-            const checkExist = setInterval(function() {
-                const elements = {
-                    me: document.getElementById('msgMe'),
-                    her: document.getElementById('msgHer'),
-                    diag: document.getElementById('diagBox'),
-                    red: document.getElementById('redLine')
-                };
-
-                if (elements.me && elements.her && elements.diag && elements.red) {
-                    elements.me.innerText = params.get('me') || '';
-                    elements.her.innerText = params.get('her') || '';
-                    elements.diag.innerText = params.get('diag') || '';
-                    elements.red.innerText = params.get('red') || '';
-                    clearInterval(checkExist);
-                }
-            }, 5); // Проверка каждые 5 миллисекунд
-        }
-        fillData();
-    </script>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="bubble me" id="msgMe"></div>
-        <div class="bubble her" id="msgHer"></div>
+    <div class="main-container">
+        <div class="screen-content">
+            <div class="bubble me" id="msgMe"></div>
+            <div class="bubble her" id="msgHer"></div>
+
+            <div class="diagnosis">
+                <div class="line" id="l1"></div>
+                <div class="line" id="l2"></div>
+                <div class="line" id="l3"></div>
+                <div class="line" id="l4"></div>
+                <div class="line" id="l5"></div>
+                <div class="line final">AVANT D’ENVOYER.</div>
+            </div>
+        </div>
     </div>
 
-    <div class="analysis-box">
-        <div class="main-message" id="diagBox"></div>
-        <div class="red-line" id="redLine"></div>
-    </div>
+    <script>
+        // Мгновенное заполнение без интервалов
+        const params = new URLSearchParams(window.location.search);
+        
+        // Его (зеленый) и Ее (серый)
+        document.getElementById('msgMe').innerText = params.get('me') || '';
+        document.getElementById('msgHer').innerText = params.get('her') || '';
 
-    <div class="footer">Analyse de risque en cours...</div>
+        // Диагноз
+        const diagText = params.get('diag');
+        if (diagText) {
+            const lines = diagText.split('\n');
+            for (let i = 0; i < 5; i++) {
+                const el = document.getElementById('l' + (i + 1));
+                if (lines[i]) el.innerText = lines[i];
+                else el.style.display = 'none'; // Скрываем пустые строки
+            }
+        }
+    </script>
 </body>
 </html>
