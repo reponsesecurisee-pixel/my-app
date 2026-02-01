@@ -3,114 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPhone Style Chat</title>
+    <title>Premium iPhone Mockup Chat</title>
     <style>
         :root {
-            --bg-main: #ffffff;
-            --bubble-me: #e5e5ea; /* Светло-серый (его сообщение) */
-            --bubble-her: #007aff; /* Синий (ее ответ) */
+            --bg-table: #1a1a1a; /* Темный фон стола */
+            --phone-frame: #2c2c2e;
+            --screen-bg: #ffffff;
+            --bubble-me: #e5e5ea;
+            --bubble-her: #007aff;
             --risk-red: #ff3b30;
         }
 
         body, html {
             margin: 0; padding: 0;
             width: 1080px; height: 1920px;
-            background-color: var(--bg-main);
+            /* Фон имитирует поверхность стола */
+            background: radial-gradient(circle, #2c2c2c 0%, #000000 100%);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
 
-        /* Область чата (верхняя часть) */
-        .chat-container {
-            padding: 60px 40px;
+        /* Корпус телефона */
+        .phone-mockup {
+            width: 900px;
+            height: 1800px;
+            background: var(--phone-frame);
+            border-radius: 120px;
+            padding: 25px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,255,255,0.2);
+            position: relative;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+        }
+
+        /* Динамический остров / Челка */
+        .notch {
+            position: absolute;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 60px;
+            background: #000;
+            border-radius: 40px;
+            z-index: 10;
+        }
+
+        /* Экран телефона */
+        .screen {
+            flex: 1;
+            background: var(--screen-bg);
+            border-radius: 95px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 4px solid #000;
+        }
+
+        /* Интерфейс мессенджера внутри экрана */
+        .chat-header {
+            height: 200px;
+            background: #f9f9f9;
+            border-bottom: 1px solid #d1d1d6;
+            display: flex;
+            align-items: center;
+            padding: 80px 50px 20px;
+            font-size: 38px;
+            font-weight: 600;
+        }
+
+        .chat-container {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
         }
 
         .bubble {
-            max-width: 70%;
-            padding: 25px 35px;
-            font-size: 40px;
-            border-radius: 40px;
+            max-width: 75%;
+            padding: 30px 40px;
+            font-size: 42px;
+            border-radius: 45px;
             line-height: 1.2;
-            position: relative;
         }
 
-        /* Его сообщение (слева) */
         .me {
             align-self: flex-start;
             background-color: var(--bubble-me);
             color: black;
-            border-bottom-left-radius: 5px;
+            border-bottom-left-radius: 8px;
         }
 
-        /* Ее ответ (чуть ниже справа) */
         .her {
             align-self: flex-end;
             background-color: var(--bubble-her);
             color: white;
-            border-bottom-right-radius: 5px;
-            margin-top: 10px;
+            border-bottom-right-radius: 8px;
         }
 
-        /* Блок анализа (ниже сообщений) */
+        /* Блок анализа */
         .analysis-box {
-            margin-top: 100px;
-            padding: 0 60px;
+            margin-top: 80px;
+            padding: 0 50px;
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 35px;
         }
 
         .main-message {
-            font-size: 55px;
+            font-size: 52px;
             font-weight: 800;
             color: #1c1c1e;
             text-transform: uppercase;
-            line-height: 1.1;
+            letter-spacing: -1px;
         }
 
         .red-line {
-            font-size: 65px;
+            font-size: 68px;
             font-weight: 900;
             color: var(--risk-red);
             text-transform: uppercase;
-            border-top: 4px solid var(--risk-red);
-            padding-top: 20px;
-            margin-top: 10px;
+            border-top: 6px solid var(--risk-red);
+            padding-top: 25px;
         }
 
-        /* Индикатор внизу */
-        .footer {
+        .footer-status {
             position: absolute;
-            bottom: 80px;
+            bottom: 60px;
             width: 100%;
             text-align: center;
-            font-size: 30px;
+            font-size: 32px;
             color: #8e8e93;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="bubble me" id="msgMe">...</div>
-        <div class="bubble her" id="msgHer">...</div>
-    </div>
 
-    <div class="analysis-box">
-        <div class="main-message" id="diagBox"></div>
-        <div class="red-line" id="redLine"></div>
-    </div>
+    <div class="phone-mockup">
+        <div class="notch"></div>
+        
+        <div class="screen">
+            <div class="chat-header">
+                <span style="color: #007aff; margin-right: 20px;">‹</span> 
+                Celin <span style="margin-left: auto; font-size: 28px; color: #8e8e93;">en ligne</span>
+            </div>
 
-    <div class="footer">Analyse de risque en cours...</div>
+            <div class="chat-container">
+                <div class="bubble me" id="msgMe">...</div>
+                <div class="bubble her" id="msgHer">...</div>
+            </div>
+
+            <div class="analysis-box">
+                <div class="main-message" id="diagBox"></div>
+                <div class="red-line" id="redLine"></div>
+            </div>
+
+            <div class="footer-status">Analyse de risque en cours...</div>
+        </div>
+    </div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        
-        // Заполняем данные
         document.getElementById('msgMe').innerText = params.get('me') || '';
         document.getElementById('msgHer').innerText = params.get('her') || '';
         document.getElementById('diagBox').innerText = params.get('diag') || '';
