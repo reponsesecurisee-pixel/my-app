@@ -26,7 +26,6 @@
             position: relative;
         }
 
-        /* Хедер */
         .header {
             width: 100%;
             height: 280px;
@@ -97,11 +96,10 @@
             color: var(--text-dark);
             text-transform: uppercase;
             letter-spacing: -1.5px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            /* Текст сразу виден на 100% */
+            opacity: 1 !important; 
         }
 
-        .line.visible { opacity: 1; }
         .line.final { color: var(--risk-red); margin-top: 30px; }
 
         .cursor-box {
@@ -153,43 +151,21 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         
-        // Наполняем сообщения
         document.getElementById('msgMe').innerText = params.get('me') || 'On se voit ce soir ?';
         document.getElementById('msgHer').innerText = params.get('her') || 'Pas maintenant.';
 
-        // Логика для строк диагноза
         const diagText = params.get('diag');
         if (diagText) {
-            // Если мы передали весь текст одной строкой с переносами
             const lines = diagText.split('\n');
             for (let i = 0; i < 5; i++) {
                 if (lines[i]) document.getElementById('l' + (i + 1)).innerText = lines[i];
             }
         } else {
-            // Если передаем по отдельности l1, l2...
             for (let i = 1; i <= 5; i++) {
                 const val = params.get('l' + i);
                 if (val) document.getElementById('l' + i).innerText = val;
             }
         }
-
-        // Плавное появление строк
-        function revealLines() {
-            for (let i = 1; i <= 6; i++) {
-                setTimeout(() => {
-                    const el = document.getElementById('l' + i);
-                    if (el && el.innerText.trim() !== "") {
-                        el.classList.add('visible');
-                    } else if (i === 6) { 
-                        el.classList.add('visible'); // Финальная красная строка всегда видна
-                    }
-                }, i * 600);
-            }
-        }
-
-        window.onload = () => {
-            setTimeout(revealLines, 500);
-        };
     </script>
 </body>
 </html>
