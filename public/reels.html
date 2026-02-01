@@ -2,119 +2,117 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPhone Style Chat</title>
+    <title>iPhone Premium Template</title>
+    <script>
+        // Переносим логику в HEAD, чтобы текст был готов ДО отрисовки страницы
+        const params = new URLSearchParams(window.location.search);
+        const data = {
+            me: params.get('me') || '',
+            her: params.get('her') || '',
+            diag: params.get('diag') || '',
+            red: params.get('red') || ''
+        };
+    </script>
     <style>
-        :root {
-            --bg-main: #ffffff;
-            --bubble-me: #e5e5ea; /* Светло-серый (его сообщение) */
-            --bubble-her: #007aff; /* Синий (ее ответ) */
-            --risk-red: #ff3b30;
-        }
-
         body, html {
             margin: 0; padding: 0;
             width: 1080px; height: 1920px;
-            background-color: var(--bg-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            display: flex;
-            flex-direction: column;
             overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        /* Область чата (верхняя часть) */
-        .chat-container {
-            padding: 60px 40px;
-            display: flex;
-            flex-direction: column;
+        /* 1. ФОН: Телефон на столе */
+        .main-bg {
+            position: relative;
+            width: 1080px; height: 1920px;
+            background: url('PHONE_TEMPLATE.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        /* 2. АВАТАР */
+        .avatar-circle {
+            position: absolute;
+            top: 265px; left: 285px;
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            background: url('celin.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        /* 3. КОНТЕЙНЕР ЧАТА */
+        .chat-area {
+            position: absolute;
+            top: 420px; left: 200px;
+            width: 680px;
+            display: flex; flex-direction: column;
             gap: 20px;
         }
 
         .bubble {
-            max-width: 70%;
-            padding: 25px 35px;
-            font-size: 40px;
-            border-radius: 40px;
+            max-width: 85%;
+            padding: 22px 30px;
+            font-size: 34px;
+            border-radius: 35px;
             line-height: 1.2;
-            position: relative;
         }
 
-        /* Его сообщение (слева) */
-        .me {
+        /* Его сообщение — СПРАВА (ЗЕЛЕНОЕ) */
+        .msg-right {
+            align-self: flex-end;
+            background-color: #34c759;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        /* Её ответ — СЛЕВА (СЕРОЕ) */
+        .msg-left {
             align-self: flex-start;
-            background-color: var(--bubble-me);
+            background-color: #e5e5ea;
             color: black;
             border-bottom-left-radius: 5px;
         }
 
-        /* Ее ответ (чуть ниже справа) */
-        .her {
-            align-self: flex-end;
-            background-color: var(--bubble-her);
-            color: white;
-            border-bottom-right-radius: 5px;
-            margin-top: 10px;
-        }
-
-        /* Блок анализа (ниже сообщений) */
+        /* 4. БЛОК АНАЛИЗА (НИЖЕ) */
         .analysis-box {
-            margin-top: 100px;
-            padding: 0 60px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
+            position: absolute;
+            top: 860px; left: 200px;
+            width: 680px;
+            display: flex; flex-direction: column;
+            gap: 25px;
         }
 
-        .main-message {
-            font-size: 55px;
-            font-weight: 800;
-            color: #1c1c1e;
-            text-transform: uppercase;
+        .main-msg {
+            font-size: 48px; font-weight: 800;
+            color: #1c1c1e; text-transform: uppercase;
             line-height: 1.1;
         }
 
-        .red-line {
-            font-size: 65px;
-            font-weight: 900;
-            color: var(--risk-red);
-            text-transform: uppercase;
-            border-top: 4px solid var(--risk-red);
-            padding-top: 20px;
-            margin-top: 10px;
-        }
-
-        /* Индикатор внизу */
-        .footer {
-            position: absolute;
-            bottom: 80px;
-            width: 100%;
-            text-align: center;
-            font-size: 30px;
-            color: #8e8e93;
+        .red-verdict {
+            font-size: 56px; font-weight: 900;
+            color: #ff3b30; text-transform: uppercase;
+            border-top: 5px solid #ff3b30;
+            padding-top: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="bubble me" id="msgMe">...</div>
-        <div class="bubble her" id="msgHer">...</div>
+    <div class="main-bg">
+        <div class="avatar-circle"></div>
+
+        <div class="chat-area">
+            <script>
+                // Выводим сообщения сразу при чтении HTML
+                document.write(`<div class="bubble msg-right">${data.me}</div>`);
+                document.write(`<div class="bubble msg-left">${data.her}</div>`);
+            </script>
+        </div>
+
+        <div class="analysis-box">
+            <script>
+                document.write(`<div class="main-msg">${data.diag}</div>`);
+                document.write(`<div class="red-verdict">${data.red}</div>`);
+            </script>
+        </div>
     </div>
-
-    <div class="analysis-box">
-        <div class="main-message" id="diagBox"></div>
-        <div class="red-line" id="redLine"></div>
-    </div>
-
-    <div class="footer">Analyse de risque en cours...</div>
-
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        
-        // Заполняем данные
-        document.getElementById('msgMe').innerText = params.get('me') || '';
-        document.getElementById('msgHer').innerText = params.get('her') || '';
-        document.getElementById('diagBox').innerText = params.get('diag') || '';
-        document.getElementById('redLine').innerText = params.get('red') || '';
-    </script>
 </body>
 </html>
