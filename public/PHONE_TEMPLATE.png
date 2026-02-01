@@ -2,26 +2,89 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Reel Template</title>
+  <title>Reel Template Final</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
+  
   <style>
     body {
-      margin: 0;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      margin: 0; padding: 0;
+      background: #000; /* Фон страницы */
+      display: flex; justify-content: center; align-items: center;
+      height: 1920px; width: 1080px;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
     }
+    
+    .container {
+      position: relative;
+      width: 1080px; height: 1920px;
+      display: flex; justify-content: center; align-items: center;
+      opacity: 0; /* Скрываем всё, пока шрифты и картинка не будут готовы */
+      transition: opacity 0.3s ease;
+    }
+
+    .container.ready {
+      opacity: 1; /* Показываем, когда всё загрузилось */
+    }
+
     img {
-      max-width: 100%;
-      height: auto;
-      display: block;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: contain;
+      z-index: 1;
+    }
+
+    #content {
+      position: relative;
+      z-index: 2;
+      color: #FFFFFF; 
+      font-size: 85px; /* Немного увеличил для сочности */
+      font-weight: 900;
+      text-align: center;
+      width: 85%;
+      line-height: 1.1;
+      text-transform: uppercase;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      word-wrap: break-word;
     }
   </style>
 </head>
 <body>
 
-  <img src="PHONE_TEMPLATE.png" alt="Message risk template">
+  <div class="container" id="mainContainer">
+    <img src="PHONE_TEMPLATE.png" id="bgImg">
+    <div id="content"></div>
+  </div>
+
+  <script>
+    async function init() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const text = urlParams.get('t') || "БЕЗ ТЕКСТА"; // Заглушка
+        document.getElementById('content').innerText = text;
+
+        const container = document.getElementById('mainContainer');
+
+        try {
+            // Ждем загрузки шрифтов и картинки
+            await document.fonts.ready;
+            const img = document.getElementById('bgImg');
+            
+            if (img.complete) {
+                container.classList.add('ready');
+            } else {
+                img.onload = () => container.classList.add('ready');
+            }
+        } catch (e) {
+            // Если что-то пошло не так, все равно показываем через секунду
+            setTimeout(() => container.classList.add('ready'), 1000);
+        }
+    }
+
+    init();
+  </script>
 
 </body>
 </html>
