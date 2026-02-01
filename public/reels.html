@@ -3,129 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Risk Diagnosis - Instant</title>
+    <title>Risk Diagnosis Template</title>
     <style>
         :root {
-            --bubble-me: #34c759; /* Зеленый (Его) */
-            --bubble-her: #e5e5ea; /* Серый (Ее) */
+            --bg-main: #f2f2f7;
+            --bubble-me: #34c759;
+            --bubble-her: #e5e5ea;
+            --text-dark: #1c1c1e;
+            --text-gray: #8e8e93;
             --risk-red: #ff3b30;
         }
 
         body, html {
             margin: 0; padding: 0;
             width: 1080px; height: 1920px;
-            overflow: hidden;
+            background-color: var(--bg-main);
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-        }
-
-        /* Фоновое изображение телефона на столе */
-        .main-container {
-            position: relative;
-            width: 1080px;
-            height: 1920px;
-            background: url('PHONE_TEMPLATE.png') no-repeat center center;
-            background-size: cover;
-        }
-
-        /* Область внутри экрана */
-        .screen-content {
-            position: absolute;
-            top: 420px; /* Позиция чата */
-            left: 140px;
-            width: 800px;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Хедер */
+        .header {
+            width: 100%;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(249, 249, 249, 0.94);
+            border-bottom: 1px solid #d1d1d6;
+            padding-top: 40px;
+        }
+
+        .avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 1px solid #d1d1d6;
+        }
+
+        .contact-info { text-align: center; }
+        .contact-name { font-size: 42px; font-weight: 600; color: var(--text-dark); margin: 0; }
+        .status { font-size: 26px; color: var(--text-gray); margin-top: 5px; }
+
+        .chat-area {
+            width: 940px;
+            margin-top: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
 
         .bubble {
-            max-width: 80%;
-            padding: 25px 35px;
-            font-size: 42px;
+            max-width: 75%;
+            padding: 28px 40px;
+            font-size: 46px;
             line-height: 1.3;
-            border-radius: 40px;
-            margin-bottom: 20px;
-            /* Текст виден СРАЗУ */
-            opacity: 1 !important;
-            display: block !important;
+            border-radius: 45px;
         }
 
-        /* Его сообщение — СПРАВА, ЗЕЛЕНОЕ */
         .me {
             align-self: flex-end;
             background-color: var(--bubble-me);
             color: white;
-            border-bottom-right-radius: 8px;
+            border-bottom-right-radius: 10px;
         }
 
-        /* Её ответ — СЛЕВА, СЕРОЕ */
         .her {
             align-self: flex-start;
             background-color: var(--bubble-her);
-            color: black;
-            border-bottom-left-radius: 8px;
+            color: var(--text-dark);
+            border-bottom-left-radius: 10px;
         }
 
-        /* Блок диагноза — СДВИГУТ НИЖЕ */
         .diagnosis {
-            margin-top: 100px;
+            margin-top: 150px;
+            width: 900px;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 40px;
+            padding-bottom: 100px;
         }
 
         .line {
-            font-size: 52px;
+            font-size: 60px;
             font-weight: 800;
-            color: #1c1c1e;
+            color: var(--text-dark);
             text-transform: uppercase;
-            letter-spacing: -1px;
-            /* Без анимаций */
-            opacity: 1 !important;
+            letter-spacing: -1.5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .final {
-            color: var(--risk-red);
-            border-top: 4px solid var(--risk-red);
-            padding-top: 15px;
-            margin-top: 10px;
+        .line.visible { opacity: 1; }
+        .line.final { color: var(--risk-red); margin-top: 30px; }
+
+        .cursor-box {
+            position: absolute;
+            bottom: 150px;
+            font-size: 34px;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
         }
+
+        .cursor {
+            width: 4px; height: 45px;
+            background: #007aff;
+            margin-left: 12px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="screen-content">
-            <div class="bubble me" id="msgMe"></div>
-            <div class="bubble her" id="msgHer"></div>
-
-            <div class="diagnosis">
-                <div class="line" id="l1"></div>
-                <div class="line" id="l2"></div>
-                <div class="line" id="l3"></div>
-                <div class="line" id="l4"></div>
-                <div class="line" id="l5"></div>
-                <div class="line final">AVANT D’ENVOYER.</div>
-            </div>
+    <div class="header">
+        <img src="celin.png" alt="Avatar" class="avatar">
+        <div class="contact-info">
+            <div class="contact-name">Celin</div>
+            <div class="status">en ligne</div>
         </div>
     </div>
 
+    <div class="chat-area">
+        <div class="bubble me" id="msgMe">...</div>
+        <div class="bubble her" id="msgHer">...</div>
+    </div>
+
+    <div class="diagnosis">
+        <div class="line" id="l1"></div>
+        <div class="line" id="l2"></div>
+        <div class="line" id="l3"></div>
+        <div class="line" id="l4"></div>
+        <div class="line" id="l5"></div>
+        <div class="line final" id="l6">AVANT D’ENVOYER.</div>
+    </div>
+
+    <div class="cursor-box">
+        Analyse de risque en cours<span class="cursor"></span>
+    </div>
+
     <script>
-        // Мгновенное заполнение без интервалов
         const params = new URLSearchParams(window.location.search);
         
-        // Его (зеленый) и Ее (серый)
-        document.getElementById('msgMe').innerText = params.get('me') || '';
-        document.getElementById('msgHer').innerText = params.get('her') || '';
+        // Наполняем сообщения
+        document.getElementById('msgMe').innerText = params.get('me') || 'On se voit ce soir ?';
+        document.getElementById('msgHer').innerText = params.get('her') || 'Pas maintenant.';
 
-        // Диагноз
+        // Логика для строк диагноза
         const diagText = params.get('diag');
         if (diagText) {
+            // Если мы передали весь текст одной строкой с переносами
             const lines = diagText.split('\n');
             for (let i = 0; i < 5; i++) {
-                const el = document.getElementById('l' + (i + 1));
-                if (lines[i]) el.innerText = lines[i];
-                else el.style.display = 'none'; // Скрываем пустые строки
+                if (lines[i]) document.getElementById('l' + (i + 1)).innerText = lines[i];
+            }
+        } else {
+            // Если передаем по отдельности l1, l2...
+            for (let i = 1; i <= 5; i++) {
+                const val = params.get('l' + i);
+                if (val) document.getElementById('l' + i).innerText = val;
             }
         }
+
+        // Плавное появление строк
+        function revealLines() {
+            for (let i = 1; i <= 6; i++) {
+                setTimeout(() => {
+                    const el = document.getElementById('l' + i);
+                    if (el && el.innerText.trim() !== "") {
+                        el.classList.add('visible');
+                    } else if (i === 6) { 
+                        el.classList.add('visible'); // Финальная красная строка всегда видна
+                    }
+                }, i * 600);
+            }
+        }
+
+        window.onload = () => {
+            setTimeout(revealLines, 500);
+        };
     </script>
 </body>
 </html>
+
