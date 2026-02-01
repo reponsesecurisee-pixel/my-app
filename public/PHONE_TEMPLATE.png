@@ -2,65 +2,26 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Social Risk Reel</title>
+  <title>Reel Template</title>
   <style>
     body {
       margin: 0;
       background: #000;
-      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: Arial, Helvetica, sans-serif;
+      height: 100vh;
     }
-
-    .frame {
-      position: relative;
-      width: 390px;       /* формат iPhone / Instagram */
-      height: 780px;
-      background: #000;
-      overflow: hidden;
-    }
-
-    .frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .overlay {
-      position: absolute;
-      bottom: 140px;
-      left: 24px;
-      right: 24px;
-      color: #e5e5e5;
-      font-size: 18px;
-      line-height: 1.3;
-    }
-
-    .overlay .danger {
-      color: #c30000;
-      margin-top: 8px;
-      font-weight: 600;
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
     }
   </style>
 </head>
 <body>
 
-  <div class="frame">
-    <img src="PHONE_TEMPLATE.png" alt="Empty message phone">
-
-    <!-- ТЕКСТ ДОБАВЛЯЕШЬ ЗДЕСЬ -->
-    <!--
-    <div class="overlay">
-      MESSAGE POLI<br>
-      SIGNAL MAL ALIGNÉ<br>
-      TRAJECTOIRE RÉDUITE
-      <div class="danger">AVANT D’ENVOYER.</div>
-    </div>
-    -->
-  </div>
+  <img src="PHONE_TEMPLATE.png" alt="Message risk template">
 
 </body>
 </html>
-
