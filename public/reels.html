@@ -26,26 +26,19 @@
             position: relative;
         }
 
-        /* Хедер */
         .header {
-            width: 100%;
-            height: 280px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            width: 100%; height: 280px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             background: rgba(249, 249, 249, 0.94);
             border-bottom: 1px solid #d1d1d6;
             padding-top: 40px;
         }
 
         .avatar {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 15px;
-            border: 1px solid #d1d1d6;
+            width: 130px; height: 130px;
+            border-radius: 50%; object-fit: cover;
+            margin-bottom: 15px; border: 1px solid #d1d1d6;
         }
 
         .contact-info { text-align: center; }
@@ -53,74 +46,51 @@
         .status { font-size: 26px; color: var(--text-gray); margin-top: 5px; }
 
         .chat-area {
-            width: 940px;
-            margin-top: 80px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
+            width: 940px; margin-top: 80px;
+            display: flex; flex-direction: column; gap: 30px;
         }
 
         .bubble {
-            max-width: 75%;
-            padding: 28px 40px;
-            font-size: 46px;
-            line-height: 1.3;
-            border-radius: 45px;
+            max-width: 75%; padding: 28px 40px;
+            font-size: 46px; line-height: 1.3; border-radius: 45px;
         }
 
         .me {
-            align-self: flex-end;
-            background-color: var(--bubble-me);
-            color: white;
-            border-bottom-right-radius: 10px;
+            align-self: flex-end; background-color: var(--bubble-me);
+            color: white; border-bottom-right-radius: 10px;
         }
 
         .her {
-            align-self: flex-start;
-            background-color: var(--bubble-her);
-            color: var(--text-dark);
-            border-bottom-left-radius: 10px;
+            align-self: flex-start; background-color: var(--bubble-her);
+            color: var(--text-dark); border-bottom-left-radius: 10px;
         }
 
         .diagnosis {
-            margin-top: 150px;
-            width: 900px;
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-            padding-bottom: 100px;
+            margin-top: 150px; width: 900px;
+            display: flex; flex-direction: column; gap: 40px;
         }
 
+        /* ИСПРАВЛЕНИЕ: Убрана прозрачность и анимация */
         .line {
-            font-size: 60px;
-            font-weight: 800;
-            color: var(--text-dark);
-            text-transform: uppercase;
+            font-size: 60px; font-weight: 800;
+            color: var(--text-dark); text-transform: uppercase;
             letter-spacing: -1.5px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            display: block; /* Сразу показываем */
         }
 
-        .line.visible { opacity: 1; }
         .line.final { color: var(--risk-red); margin-top: 30px; }
 
         .cursor-box {
-            position: absolute;
-            bottom: 150px;
-            font-size: 34px;
-            color: var(--text-gray);
-            display: flex;
-            align-items: center;
+            position: absolute; bottom: 150px;
+            font-size: 34px; color: var(--text-gray);
+            display: flex; align-items: center;
         }
 
         .cursor {
-            width: 4px; height: 45px;
-            background: #007aff;
-            margin-left: 12px;
-            animation: blink 1s infinite;
+            width: 4px; height: 45px; background: #007aff;
+            margin-left: 12px; animation: blink 1s infinite;
         }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } opacity: 1; /* Текст виден сразу */ }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     </style>
 </head>
 <body>
@@ -133,8 +103,8 @@
     </div>
 
     <div class="chat-area">
-        <div class="bubble me" id="msgMe">...</div>
-        <div class="bubble her" id="msgHer">...</div>
+        <div class="bubble me" id="msgMe"></div>
+        <div class="bubble her" id="msgHer"></div>
     </div>
 
     <div class="diagnosis">
@@ -151,47 +121,31 @@
     </div>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        window.onload = () => {
-    revealLines(); // Запускаем мгновенно
-        
-        // Наполняем сообщения
-        document.getElementById('msgMe').innerText = params.get('me') || 'On se voit ce soir ?';
-        document.getElementById('msgHer').innerText = params.get('her') || 'Pas maintenant.';
+        // Функция для мгновенного заполнения текста
+        function fillInstant() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Заполняем чат
+            document.getElementById('msgMe').innerText = params.get('me') || '';
+            document.getElementById('msgHer').innerText = params.get('her') || '';
 
-        // Логика для строк диагноза
-        const diagText = params.get('diag');
-        if (diagText) {
-            // Если мы передали весь текст одной строкой с переносами
-            const lines = diagText.split('\n');
-            for (let i = 0; i < 5; i++) {
-                if (lines[i]) document.getElementById('l' + (i + 1)).innerText = lines[i];
-            }
-        } else {
-            // Если передаем по отдельности l1, l2...
-            for (let i = 1; i <= 5; i++) {
-                const val = params.get('l' + i);
-                if (val) document.getElementById('l' + i).innerText = val;
-            }
-        }
-
-        // Быстрое появление строк
-        function revealLines() {
-            for (let i = 1; i <= 6; i++) {
-                setTimeout(() => {
-                    const el = document.getElementById('l' + i);
-                    if (el && el.innerText.trim() !== "") {
-                        el.classList.add('visible');
-                    } else if (i === 6) { 
-                        el.classList.add('visible'); // Финальная красная строка всегда видна
-                    }
-                }, i * 600);
+            // Заполняем диагноз
+            const diagText = params.get('diag');
+            if (diagText) {
+                const lines = diagText.split('\n');
+                for (let i = 0; i < 5; i++) {
+                    if (lines[i]) document.getElementById('l' + (i + 1)).innerText = lines[i];
+                }
+            } else {
+                for (let i = 1; i <= 5; i++) {
+                    const val = params.get('l' + i);
+                    if (val) document.getElementById('l' + i).innerText = val;
+                }
             }
         }
 
-        window.onload = () => {
-            setTimeout(revealLines, 500);
-        };
+        // Запускаем не дожидаясь загрузки картинок
+        fillInstant();
     </script>
 </body>
 </html>
