@@ -2,59 +2,78 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Social Risk Reel</title>
+<title>Social Risk Reel — Final</title>
 
 <style>
+/* === КАДР REELS === */
 html, body {
   margin: 0;
   padding: 0;
   width: 1080px;
   height: 1920px;
-  background: #0b0b0b;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
 }
 
-/* HEADER */
+/* === ФОН С ТЕЛЕФОНОМ === */
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: url("PHONE_TEMPLATE.png") center center no-repeat;
+  background-size: cover;
+}
+
+/* === ТУМАН ДЛЯ ЧИТАЕМОСТИ === */
+.scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0,0,0,0.15),
+    rgba(0,0,0,0.55)
+  );
+}
+
+/* === ШАПКА (ИМЯ + СТАТУС) === */
 .header {
-  height: 260px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid #2c2c2e;
+  position: absolute;
+  top: 120px;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
 }
 
 .name {
-  font-size: 48px;
+  font-size: 46px;
   font-weight: 600;
   color: #f2f2f7;
 }
 
 .status {
-  font-size: 28px;
+  font-size: 26px;
   color: #8e8e93;
   margin-top: 6px;
 }
 
-/* EMPTY CHAT */
-.chat {
-  flex: 1;
-}
-
-/* DIAGNOSIS */
+/* === ДИАГНОЗ (НА ЭКРАНЕ ТЕЛЕФОНА) === */
 .diagnosis {
-  padding: 0 120px 280px 120px;
+  position: absolute;
+  top: 640px;              /* ПОД ЭКРАН — НЕ МЕНЯТЬ ЧАСТО */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 820px;
   display: flex;
   flex-direction: column;
   gap: 34px;
+  z-index: 2;
 }
 
 .line {
-  font-size: 64px;
+  font-size: 60px;
   font-weight: 800;
   color: #e5e5ea;
-  letter-spacing: -1.5px;
+  letter-spacing: -1.4px;
 }
 
 .final {
@@ -62,27 +81,28 @@ html, body {
   margin-top: 20px;
 }
 
-/* CURSOR */
+/* === КУРСОР === */
 .cursor-box {
   position: absolute;
-  bottom: 160px;
-  left: 120px;
-  font-size: 34px;
+  bottom: 170px;
+  left: 130px;
+  font-size: 32px;
   color: #8e8e93;
   display: flex;
   align-items: center;
+  z-index: 2;
 }
 
 .cursor {
   width: 4px;
-  height: 44px;
+  height: 40px;
   background: #0a84ff;
   margin-left: 12px;
   animation: blink 1s infinite;
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
+  0%,100% { opacity: 1; }
   50% { opacity: 0; }
 }
 </style>
@@ -90,28 +110,29 @@ html, body {
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="name">Celin</div>
-  <div class="status">en ligne</div>
-</div>
+<div class="scene">
 
-<!-- EMPTY CHAT ZONE -->
-<div class="chat"></div>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="name">Celin</div>
+    <div class="status">en ligne</div>
+  </div>
 
-<!-- DIAGNOSIS (VISIBLE IMMEDIATELY) -->
-<div class="diagnosis">
-  <div class="line" id="l1">MESSAGE DIRECT</div>
-  <div class="line" id="l2">SIGNAL MAL ALIGNÉ</div>
-  <div class="line" id="l3">DÉCALAGE DE STATUT</div>
-  <div class="line" id="l4">PRESSION IMPLICITE</div>
-  <div class="line" id="l5">TRAJECTOIRE RÉDUITE</div>
-  <div class="line final">AVANT D’ENVOYER.</div>
-</div>
+  <!-- DIAGNOSTIC -->
+  <div class="diagnosis">
+    <div class="line">MESSAGE DIRECT</div>
+    <div class="line">SIGNAL MAL ALIGNÉ</div>
+    <div class="line">DÉCALAGE DE STATUT</div>
+    <div class="line">PRESSION IMPLICITE</div>
+    <div class="line">TRAJECTOIRE RÉDUITE</div>
+    <div class="line final">AVANT D’ENVOYER.</div>
+  </div>
 
-<!-- CURSOR -->
-<div class="cursor-box">
-  Analyse de risque en cours<span class="cursor"></span>
+  <!-- CURSOR -->
+  <div class="cursor-box">
+    Analyse de risque en cours<span class="cursor"></span>
+  </div>
+
 </div>
 
 </body>
