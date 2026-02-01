@@ -98,7 +98,11 @@
     const contentDiv = document.getElementById('content');
     const frameDiv = document.getElementById('frameBox');
     
-    contentDiv.innerText = text;
+    if (isFinal) {
+  contentDiv.innerText = "AVANT D’ENVOYER";
+} else {
+  contentDiv.innerText = text;
+}
 
     // ЛОГИКА ИЕРАРХИИ
     // Слайды 3 и 4 (индексы 2 и 3) делаем "Тяжелыми"
