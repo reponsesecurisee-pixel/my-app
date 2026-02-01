@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPhone Risk Analysis Template</title>
+    <title>Premium Reel Design</title>
     <style>
         body, html {
             margin: 0; padding: 0;
@@ -12,7 +12,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        /* Контейнер с вашим шаблоном телефона */
+        /* Фоновое изображение (ваш PHONE_TEMPLATE.png) */
         .main-container {
             position: relative;
             width: 1080px;
@@ -21,89 +21,108 @@
             background-size: cover;
         }
 
-        /* Область внутри экрана телефона */
-        .screen-overlay {
+        /* Фото контакта (вверху слева в кружочке) */
+        .contact-photo {
             position: absolute;
-            top: 280px;  /* Подстройте под начало экрана вашего шаблона */
-            left: 120px; /* Подстройте под левый край экрана */
-            width: 840px;
-            height: 1400px;
+            top: 265px;
+            left: 285px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: url('celin.png') no-repeat center center; /* Убедитесь, что celin.png загружен */
+            background-size: cover;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Контейнер для сообщений */
+        .chat-overlay {
+            position: absolute;
+            top: 420px;
+            left: 200px;
+            width: 680px;
             display: flex;
             flex-direction: column;
+            gap: 20px;
         }
 
-        /* Сообщения */
         .bubble {
-            max-width: 80%;
-            padding: 25px 35px;
-            font-size: 38px;
-            border-radius: 40px;
+            max-width: 85%;
+            padding: 22px 30px;
+            font-size: 34px;
+            border-radius: 35px;
             line-height: 1.2;
-            margin-bottom: 20px;
+            position: relative;
         }
 
+        /* Его сообщение (СПРАВА, ЗЕЛЕНОЕ) */
         .me {
-            align-self: flex-start;
-            background-color: #e5e5ea; /* Светло-серый */
-            color: black;
-            border-bottom-left-radius: 5px;
-            margin-top: 50px;
-        }
-
-        .her {
             align-self: flex-end;
-            background-color: #007aff; /* Синий iPhone */
+            background-color: #34c759; /* Тот самый зеленый */
             color: white;
             border-bottom-right-radius: 5px;
         }
 
-        /* Блок анализа (центр экрана) */
-        .analysis-content {
-            margin-top: 100px;
+        /* Её ответ (СЛЕВА, СЕРОЕ) */
+        .her {
+            align-self: flex-start;
+            background-color: #e5e5ea; /* Светло-серый */
+            color: black;
+            border-bottom-left-radius: 5px;
+        }
+
+        /* Блок анализа (сдвинут НИЖЕ) */
+        .analysis-box {
+            position: absolute;
+            top: 850px; /* Сдвинуто ниже сообщений */
+            left: 200px;
+            width: 680px;
             display: flex;
             flex-direction: column;
             gap: 25px;
         }
 
-        .line {
-            font-size: 52px;
+        .main-text {
+            font-size: 48px;
             font-weight: 800;
             color: #1c1c1e;
             text-transform: uppercase;
             letter-spacing: -1px;
-            opacity: 1; /* Всегда яркий текст */
+            line-height: 1.1;
         }
 
-        .final-red {
-            font-size: 60px;
+        .red-line {
+            font-size: 56px;
             font-weight: 900;
             color: #ff3b30;
             text-transform: uppercase;
-            margin-top: 20px;
-            border-top: 4px solid #ff3b30;
+            border-top: 5px solid #ff3b30;
             padding-top: 15px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="main-container">
-        <div class="screen-overlay">
+        <div class="contact-photo"></div>
+
+        <div class="chat-overlay">
             <div class="bubble me" id="msgMe">...</div>
             <div class="bubble her" id="msgHer">...</div>
+        </div>
 
-            <div class="analysis-content">
-                <div class="line" id="diagBox"></div>
-                <div class="line final-red" id="redLine"></div>
-            </div>
+        <div class="analysis-box">
+            <div class="main-text" id="diagBox"></div>
+            <div class="red-line" id="redLine"></div>
         </div>
     </div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        
-        // Подставляем данные из n8n
+        // Его сообщение идет в зеленый баббл справа
         document.getElementById('msgMe').innerText = params.get('me') || '';
+        // Её ответ идет в серый баббл слева
         document.getElementById('msgHer').innerText = params.get('her') || '';
+        // Текст анализа и красная строка
         document.getElementById('diagBox').innerText = params.get('diag') || '';
         document.getElementById('redLine').innerText = params.get('red') || '';
     </script>
