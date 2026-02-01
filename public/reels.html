@@ -3,126 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Reel Design</title>
+    <title>iPhone Style Chat</title>
     <style>
+        :root {
+            --bg-main: #ffffff;
+            --bubble-me: #e5e5ea; /* Светло-серый (его сообщение) */
+            --bubble-her: #007aff; /* Синий (ее ответ) */
+            --risk-red: #ff3b30;
+        }
+
         body, html {
             margin: 0; padding: 0;
             width: 1080px; height: 1920px;
-            overflow: hidden;
+            background-color: var(--bg-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        /* Фоновое изображение (ваш PHONE_TEMPLATE.png) */
-        .main-container {
-            position: relative;
-            width: 1080px;
-            height: 1920px;
-            background: url('PHONE_TEMPLATE.png') no-repeat center center;
-            background-size: cover;
-        }
-
-        /* Фото контакта (вверху слева в кружочке) */
-        .contact-photo {
-            position: absolute;
-            top: 265px;
-            left: 285px;
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: url('celin.png') no-repeat center center; /* Убедитесь, что celin.png загружен */
-            background-size: cover;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* Контейнер для сообщений */
-        .chat-overlay {
-            position: absolute;
-            top: 420px;
-            left: 200px;
-            width: 680px;
+        /* Область чата (верхняя часть) */
+        .chat-container {
+            padding: 60px 40px;
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
         .bubble {
-            max-width: 85%;
-            padding: 22px 30px;
-            font-size: 34px;
-            border-radius: 35px;
+            max-width: 70%;
+            padding: 25px 35px;
+            font-size: 40px;
+            border-radius: 40px;
             line-height: 1.2;
             position: relative;
         }
 
-        /* Его сообщение (СПРАВА, ЗЕЛЕНОЕ) */
+        /* Его сообщение (слева) */
         .me {
-            align-self: flex-end;
-            background-color: #34c759; /* Тот самый зеленый */
-            color: white;
-            border-bottom-right-radius: 5px;
-        }
-
-        /* Её ответ (СЛЕВА, СЕРОЕ) */
-        .her {
             align-self: flex-start;
-            background-color: #e5e5ea; /* Светло-серый */
+            background-color: var(--bubble-me);
             color: black;
             border-bottom-left-radius: 5px;
         }
 
-        /* Блок анализа (сдвинут НИЖЕ) */
-        .analysis-box {
-            position: absolute;
-            top: 850px; /* Сдвинуто ниже сообщений */
-            left: 200px;
-            width: 680px;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
+        /* Ее ответ (чуть ниже справа) */
+        .her {
+            align-self: flex-end;
+            background-color: var(--bubble-her);
+            color: white;
+            border-bottom-right-radius: 5px;
+            margin-top: 10px;
         }
 
-        .main-text {
-            font-size: 48px;
+        /* Блок анализа (ниже сообщений) */
+        .analysis-box {
+            margin-top: 100px;
+            padding: 0 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .main-message {
+            font-size: 55px;
             font-weight: 800;
             color: #1c1c1e;
             text-transform: uppercase;
-            letter-spacing: -1px;
             line-height: 1.1;
         }
 
         .red-line {
-            font-size: 56px;
+            font-size: 65px;
             font-weight: 900;
-            color: #ff3b30;
+            color: var(--risk-red);
             text-transform: uppercase;
-            border-top: 5px solid #ff3b30;
-            padding-top: 15px;
+            border-top: 4px solid var(--risk-red);
+            padding-top: 20px;
             margin-top: 10px;
+        }
+
+        /* Индикатор внизу */
+        .footer {
+            position: absolute;
+            bottom: 80px;
+            width: 100%;
+            text-align: center;
+            font-size: 30px;
+            color: #8e8e93;
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="contact-photo"></div>
-
-        <div class="chat-overlay">
-            <div class="bubble me" id="msgMe">...</div>
-            <div class="bubble her" id="msgHer">...</div>
-        </div>
-
-        <div class="analysis-box">
-            <div class="main-text" id="diagBox"></div>
-            <div class="red-line" id="redLine"></div>
-        </div>
+    <div class="chat-container">
+        <div class="bubble me" id="msgMe">...</div>
+        <div class="bubble her" id="msgHer">...</div>
     </div>
+
+    <div class="analysis-box">
+        <div class="main-message" id="diagBox"></div>
+        <div class="red-line" id="redLine"></div>
+    </div>
+
+    <div class="footer">Analyse de risque en cours...</div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        // Его сообщение идет в зеленый баббл справа
+        
+        // Заполняем данные
         document.getElementById('msgMe').innerText = params.get('me') || '';
-        // Её ответ идет в серый баббл слева
         document.getElementById('msgHer').innerText = params.get('her') || '';
-        // Текст анализа и красная строка
         document.getElementById('diagBox').innerText = params.get('diag') || '';
         document.getElementById('redLine').innerText = params.get('red') || '';
     </script>
