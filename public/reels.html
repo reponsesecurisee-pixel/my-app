@@ -120,7 +120,7 @@
             animation: blink 1s infinite;
         }
 
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } opacity: 1; /* Текст виден сразу */ }
     </style>
 </head>
 <body>
@@ -152,6 +152,8 @@
 
     <script>
         const params = new URLSearchParams(window.location.search);
+        window.onload = () => {
+    revealLines(); // Запускаем мгновенно
         
         // Наполняем сообщения
         document.getElementById('msgMe').innerText = params.get('me') || 'On se voit ce soir ?';
